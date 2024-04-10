@@ -1,0 +1,56 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Number Recognition</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.9.0/dist/tf.min.js"></script>
+    <script src="model.js"></script>
+</head>
+
+<body>
+    <canvas id="canvas" width="280" height="280" style="border:1px solid black;"></canvas>
+    <button onclick="predictDigit()">Predict Digit</button>
+    <div id="prediction"></div>
+
+    <script>
+        // Function to draw on canvas
+        let canvas = document.getElementById('canvas');
+        let ctx = canvas.getContext('2d');
+        let isDrawing = false;
+        canvas.addEventListener('mousedown', () => isDrawing = true);
+        canvas.addEventListener('mouseup', () => isDrawing = false);
+        canvas.addEventListener('mousemove', draw);
+
+        function draw(e) {
+            if (!isDrawing) return;
+            ctx.lineWidth = 10;
+            ctx.lineCap = 'round';
+            ctx.strokeStyle = 'black';
+            ctx.lineTo(e.clientX, e.clientY);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(e.clientX, e.clientY);
+        }
+
+        // Function to predict digit
+        async function predictDigit() {
+            const image = canvas.toDataURL();
+            const img = new Image();
+            img.src = image;
+            await img.decode();
+            const tensor = tf.browser.fromPixels(img, 1)
+                .resizeNearestNeighbor([28, 28])
+                .toFloat()
+                .div(tf.scalar(255))
+                .expandDims();
+            const prediction = await model.predict(tensor).data();
+            const digit = prediction.indexOf(Math.max(...prediction));
+            document.getElementById('prediction').innerHTML = `Predicted Digit: ${digit}`;
+        }
+    </script>
+</body>
+
+</html>
