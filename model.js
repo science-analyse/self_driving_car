@@ -1,6 +1,6 @@
 // Load required modules
 const tf = require('@tensorflow/tfjs');
-const mnist = require('mnist');
+const fs = require('fs');
 
 // Define the model architecture and compile it
 const model = tf.sequential();
@@ -21,19 +21,24 @@ model.compile({
 });
 
 // Load and preprocess the MNIST dataset
-const set = mnist.set(8000, 2000);
-if (!set || !set.training || !set.test) {
-    console.error('Failed to load MNIST dataset');
-    process.exit(1);
-}
-const trainingSet = set.training;
-const testingSet = set.test;
-const { images: trainingImages, labels: trainingLabels } = trainingSet;
-const { images: testingImages, labels: testingLabels } = testingSet;
+const trainingImages = loadImages('./data/mnist/train-images-idx3-ubyte');
+const trainingLabels = loadLabels('./data/mnist/train-labels-idx1-ubyte');
+const testingImages = loadImages('./data/mnist/t10k-images-idx3-ubyte');
+const testingLabels = loadLabels('./data/mnist/t10k-labels-idx1-ubyte');
+
+// Check if data loading was successful
 if (!trainingImages || !trainingLabels || !testingImages || !testingLabels) {
-    console.error('Failed to extract data from MNIST dataset');
+    console.error('Failed to load data from MNIST dataset');
     process.exit(1);
 }
+
+// Print image and label counts
+console.log('Training images:', trainingImages.length);
+console.log('Training labels:', trainingLabels.length);
+console.log('Testing images:', testingImages.length);
+console.log('Testing labels:', testingLabels.length);
+
+// Convert data to TensorFlow tensors
 const xTrain = tf.tensor4d(trainingImages, [trainingImages.length, 28, 28, 1]);
 const yTrain = tf.tensor1d(trainingLabels);
 const xTest = tf.tensor4d(testingImages, [testingImages.length, 28, 28, 1]);
@@ -48,13 +53,6 @@ async function trainModel() {
     });
 }
 
-console.log('Training set:', trainingSet);
-console.log('Testing set:', testingSet);
-console.log('Training images:', trainingImages.length);
-console.log('Training labels:', trainingLabels.length);
-console.log('Testing images:', testingImages.length);
-console.log('Testing labels:', testingLabels.length);
-
 trainModel().then(() => {
     console.log('Model trained successfully.');
     // Save the model
@@ -64,3 +62,13 @@ trainModel().then(() => {
 }).catch(error => {
     console.error('Failed to train the model:', error);
 });
+
+// Function to load images from file
+function loadImages(path) {
+    // Implement code to load images from file
+}
+
+// Function to load labels from file
+function loadLabels(path) {
+    // Implement code to load labels from file
+}
