@@ -10,7 +10,6 @@ This project is a simulation of self-driving cars navigating through a road envi
 4. [Usage](#usage)
 5. [Customization](#customization)
 6. [Contributing](#contributing)
-7. [License](#license)
 
 ## Introduction
 
