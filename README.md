@@ -1,68 +1,266 @@
-# Self-Driving Car Simulation
+# Self-Driving Car Neural Network Simulation
 
-This project is a simulation of self-driving cars navigating through a road environment. The cars utilize neural networks for decision-making and are equipped with sensors to perceive their surroundings. The simulation provides a platform for experimenting with different neural network architectures, sensor configurations, and car behaviors.
+## Executive Summary
+
+This project implements an AI-powered self-driving car simulation using neural networks and JavaScript. The simulation features 100 parallel AI cars that learn to navigate through a dynamically generated road environment, avoiding obstacles and staying within road boundaries.
 
 ## Table of Contents
 
-1. [Introduction](#introduction)
-2. [Features](#features)
-3. [Installation](#installation)
-4. [Usage](#usage)
-5. [Customization](#customization)
-6. [Contributing](#contributing)
+1. [Project Overview](#project-overview)
+2. [Architecture](#architecture)
+3. [Key Components](#key-components)
+4. [Neural Network Design](#neural-network-design)
+5. [Learning Process](#learning-process)
+6. [Technical Implementation](#technical-implementation)
+7. [Results and Performance](#results-and-performance)
+8. [How to Run](#how-to-run)
+9. [Future Enhancements](#future-enhancements)
+10. [Conclusion](#conclusion)
 
-## Introduction
+## Project Overview
 
-Self-driving cars have emerged as a significant area of research and development in recent years. This simulation aims to provide a sandbox environment for exploring various aspects of autonomous vehicle technology, including:
+This project represents a comprehensive implementation of autonomous vehicle navigation using neural networks. The system simulates multiple self-driving cars simultaneously, each equipped with a neural brain that makes real-time decisions based on sensor input.
 
-- Neural network-based decision-making
-- Sensor data processing and interpretation
-- Collision detection and avoidance strategies
+### Key Features
 
-The simulation allows users to observe and analyze the behavior of self-driving cars under different conditions, facilitating learning and experimentation in the field of autonomous systems.
+- **Real-time Physics Simulation**: Accurate car movement with speed, acceleration, and friction
+- **Neural Network Decision Making**: Each car makes autonomous driving decisions
+- **Sensor System**: Cars equipped with ray-casting sensors to detect environment
+- **Genetic Algorithm**: Population-based learning with mutation for continuous improvement
+- **Visual Network Representation**: Real-time visualization of neural network activity
+- **Collision Detection**: Complex polygon-based collision system
 
-## Features
+## Architecture
 
-- Simulation of multiple self-driving cars navigating through a road environment.
-- Implementation of neural networks for decision-making by individual cars.
-- Integration of sensors for detecting obstacles and boundaries on the road.
-- Visualization of neural network architectures and sensor data for analysis.
-- Customizable parameters for adjusting the behavior and performance of cars.
+```mermaid
+graph TD
+    A[Main Application] --> B[Car System]
+    A --> C[Road Environment]
+    A --> D[Neural Network Visualizer]
+    
+    B --> E[Car Physics]
+    B --> F[Sensor System]
+    B --> G[Neural Network Brain]
+    B --> H[Control System]
+    
+    C --> I[Road Generation]
+    C --> J[Traffic Management]
+    
+    G --> K[Network Layers]
+    G --> L[Feed Forward Algorithm]
+    
+    style A fill:#f9f,stroke:#333,stroke-width:4px
+    style G fill:#bfb,stroke:#333,stroke-width:2px
+```
 
-## Installation
+## Key Components
 
-To run the self-driving car simulation locally, follow these steps:
+### 1. Car Model
+- Implements realistic physics with acceleration, braking, and steering
+- Handles collision detection with road boundaries and other vehicles
+- Contains embedded neural network for decision making
 
-1. Clone the repository to your local machine:
+### 2. Sensor System
+- Ray-casting technology for environment detection
+- Configurable number of rays (default: 5)
+- Detects distance to nearest obstacles
+- Provides normalized input to neural network
 
+### 3. Neural Network
+- Feedforward neural network architecture
+- Input layer: Sensor readings
+- Hidden layers: Processing logic
+- Output layer: Control decisions (forward, left, right, reverse)
+
+### 4. Road System
+- Dynamic road generation with curves
+- Lane management system
+- Boundary detection for collision
+
+## Neural Network Design
+
+```mermaid
+graph LR
+    A[Sensor Input] --> B[Input Layer]
+    B --> C[Hidden Layer]
+    C --> D[Output Layer]
+    D --> E[Control Actions]
+    
+    B --> B1[Ray 1 Distance]
+    B --> B2[Ray 2 Distance]
+    B --> B3[Ray 3 Distance]
+    B --> B4[Ray 4 Distance]
+    B --> B5[Ray 5 Distance]
+    
+    E --> E1[Forward]
+    E --> E2[Left]
+    E --> E3[Right]
+    E --> E4[Reverse]
+    
+    style A fill:#bbf,stroke:#333,stroke-width:2px
+    style E fill:#bfb,stroke:#333,stroke-width:2px
+```
+
+### Network Architecture
+- **Input Layer**: 5 neurons (sensor ray readings)
+- **Hidden Layers**: Configurable depth and width
+- **Output Layer**: 4 neurons (movement controls)
+- **Activation Function**: Binary threshold function
+
+## Learning Process
+
+```mermaid
+flowchart TD
+    A[Initialize Population] --> B[Run Simulation]
+    B --> C{Cars Crashed?}
+    C -->|No| B
+    C -->|Yes| D[Evaluate Performance]
+    D --> E[Select Best Performer]
+    E --> F[Store Best Brain]
+    F --> G[Generate New Population]
+    G --> H[Apply Mutations]
+    H --> B
+    
+    style A fill:#f9f,stroke:#333,stroke-width:2px
+    style E fill:#bfb,stroke:#333,stroke-width:2px
+    style F fill:#bbf,stroke:#333,stroke-width:2px
+```
+
+### Genetic Algorithm Implementation
+1. **Population**: 100 cars per generation
+2. **Selection**: Best performer based on distance traveled
+3. **Mutation**: Random weight adjustments (40% mutation rate)
+4. **Persistence**: Best brain saved to localStorage
+
+## Technical Implementation
+
+### Core Technologies
+- **Pure JavaScript**: No external frameworks
+- **HTML5 Canvas**: Rendering engine
+- **Local Storage**: Brain persistence
+- **Object-Oriented Programming**: Clean architecture
+
+### File Structure
+```mermaid
+graph TD
+    A[index.html] --> B[main.js]
+    B --> C[car.js]
+    B --> D[road.js]
+    B --> E[controls.js]
+    C --> F[sensor.js]
+    C --> G[network.js]
+    B --> H[visualizer.js]
+    B --> I[utils.js]
+    
+    style A fill:#f96,stroke:#333,stroke-width:2px
+    style B fill:#f9f,stroke:#333,stroke-width:2px
+```
+
+### Key Algorithms
+
+#### Collision Detection
+```javascript
+// Polygon intersection algorithm
+function polysIntersect(poly1, poly2) {
+    // Check each edge of poly1 against each edge of poly2
+    // Return true if any edges intersect
+}
+```
+
+#### Neural Network Feed Forward
+```javascript
+// Process input through network layers
+static feedForward(givenInputs, network) {
+    let outputs = Level.feedForward(givenInputs, network.levels[0]);
+    for(let i = 1; i < network.levels.length; i++) {
+        outputs = Level.feedForward(outputs, network.levels[i]);
+    }
+    return outputs;
+}
+```
+
+## Results and Performance
+
+### Simulation Metrics
+- **Population Size**: 100 cars per generation
+- **Convergence Time**: Varies based on road complexity
+- **Success Rate**: Improves with each generation
+- **Performance**: Real-time rendering at 60 FPS
+
+### Visual Feedback
+- Main canvas: Road and cars
+- Network canvas: Real-time neural network visualization
+- Best performer highlighted with sensor rays
+
+## How to Run
+
+1. Clone the repository:
    ```bash
    git clone https://github.com/Ismat-Samadov/self_driving_car.git
    ```
 
-2. Navigate to the project directory:
-
+2. Navigate to project directory:
    ```bash
    cd self_driving_car
    ```
 
-3. Open the `index.html` file in a web browser to launch the simulation.
+3. Open `index.html` in a web browser
 
-## Usage
+4. Use browser console commands:
+   - `save()` - Save best performing neural network
+   - `discard()` - Clear saved neural network
 
-- Upon launching the simulation, you'll be presented with a visual representation of the road environment and the self-driving cars.
-- Use the browser console to interact with the simulation:
-  - Call the `save()` method to store a car's neural network in local storage.
-  - Call the `discard()` method to remove the saved neural network from local storage.
-- Experiment with different parameters such as the number of cars simulated in parallel (`N`) and the mutation amount to observe changes in behavior.
+## Future Enhancements
 
-## Customization
+```mermaid
+mindmap
+  root((Future Enhancements))
+    More Complex Networks
+      Deeper layers
+      Different activation functions
+      Convolutional layers for visual input
+    
+    Advanced Algorithms
+      NEAT algorithm
+      Q-Learning
+      Reinforcement learning
+    
+    Environment Complexity
+      Multiple lanes
+      Traffic lights
+      Dynamic obstacles
+      Weather conditions
+    
+    Performance Optimization
+      Web Workers
+      GPU acceleration
+      Batch processing
+```
 
-The simulation is highly customizable, allowing users to tweak various parameters to suit their needs:
+### Potential Improvements
+1. **Advanced Neural Architectures**: Implement recurrent networks for temporal awareness
+2. **Enhanced Sensors**: Add visual input processing
+3. **Complex Environments**: Multiple lanes, intersections, traffic signals
+4. **Performance Metrics**: Detailed analytics and learning curves
+5. **Multi-agent Cooperation**: Cars that communicate and cooperate
 
-- Adjust the number of cars simulated in parallel (`N`) to observe the collective behavior of multiple cars.
-- Modify the mutation amount to control the rate of mutation in neural networks.
-- Customize the neural network architecture, sensor configurations, and car behaviors by modifying the corresponding JavaScript files.
+## Conclusion
 
-## Contributing
+This self-driving car simulation demonstrates the power of neural networks in solving complex navigation problems. Through evolutionary learning, the cars develop increasingly sophisticated driving behaviors, showcasing the potential of AI in autonomous vehicle technology.
 
-Contributions to the project are welcome! If you have any ideas, suggestions, or improvements, feel free to open an issue or submit a pull request. Your contributions will help enhance the simulation and make it more valuable for the community.
+### Key Achievements
+- Successfully implemented neural network-based decision making
+- Created a robust physics and collision detection system
+- Developed an effective genetic algorithm for continuous improvement
+- Built a real-time visualization system for neural network activity
+
+### Educational Value
+This project serves as an excellent educational tool for understanding:
+- Neural network fundamentals
+- Genetic algorithms and evolutionary computation
+- Real-time simulation and physics
+- JavaScript object-oriented programming
+
+---
+
+**Created by**: Ismat Samadov  
