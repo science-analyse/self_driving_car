@@ -260,7 +260,3 @@ This project serves as an excellent educational tool for understanding:
 - Genetic algorithms and evolutionary computation
 - Real-time simulation and physics
 - JavaScript object-oriented programming
-
----
-
-**Created by**: Ismat Samadov  
